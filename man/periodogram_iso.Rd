@@ -4,7 +4,7 @@
 \alias{periodogram_iso}
 \title{Isotropic Periodogram Estimator}
 \usage{
-periodogram_iso(x, t, ..., normalise = TRUE)
+periodogram_iso(x, t, ..., debias = TRUE, normalise = TRUE, taper_a = 25)
 }
 \arguments{
 \item{x}{point pattern ppp-object with a rectangular window}
@@ -13,13 +13,16 @@ periodogram_iso(x, t, ..., normalise = TRUE)
 
 \item{...}{ignored}
 
-\item{normalise}{Divide by lambda? Poisson process will then be approximately constant 1.}
-
 \item{debias}{Apply debiasing after estimation? Will reduce bias near 0, but might lead to a negative estimates.}
+
+\item{normalise}{Divide by lambda? Poisson process will then be in theory constant 1.}
+
+\item{taper_a}{Use a squared-exponential taper with range taper_a>0? Default: 25.}
 }
 \description{
 Isotropic Periodogram Estimator
 }
 \details{
-Basically, the Hankel-transform of the data.
+Basically, the Hankel-transform of the data. Note that the taper-parameter (taper_a) is related to the inverse of 
+the taper variance, so a smaller number means less tapering. And taper_a = 0 equates to no tapering.
 }

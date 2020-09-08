@@ -12,11 +12,11 @@ At the moment the package only supports data objects of class `spatstat::ppp` wi
 is.ppp(x) & is.rectangle(x$window)
 ```
 
-Todo:
+Done: first versions of
 
-* [x] raw 2D
-* [x] mt 2D
-* [] isotropic 2D
-* [x] basic methods
+* [x] Bartlett's periodogram 2D
+* [x] Multitapered 2D
+* [x] isotropic 2D
+* [x] basic methods (plot, print, as.im, rotmean, as.data.frame)
 
  

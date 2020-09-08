@@ -1,0 +1,123 @@
+---
+title: "pppgram-package: basic functionality"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{basic_functionality}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height=5,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ggplot2)
+library(pppgram)
+library(spatstat)
+```
+
+Demonstrate the basic functionality of the package. Note that only 2D rectangular windows are supported at the moment.
+
+Example point pattern:
+
+```{r, fig.width=7, fig.height=4}
+set.seed(1)
+x <- rThomas(0.01, 3, 3, win = owin(c(0,200), c(0,100)))
+plot(x)
+```
+
+
+# Estimation of 2D periodogram
+
+
+## Bartlett's periodogram
+
+
+```{r}
+per0 <- periodogram(x, M = 15)
+per0
+```
+
+If non-Fourier grid wavenumbers are used (or a non-rectangular window is used) the border-bias needs to be addressed
+
+```{r, fig.width=6, fig.height=6}
+per1 <- periodogram(x, omega = seq(-1, 1, l = 51)*.15, debias_early = FALSE) # will have bias near w=0
+per2 <- periodogram(x, omega = per1$omega) # the default is TRUE
+```
+
+## Smoothing
+This is simple smoother application using spatstat::Smooth.im (using spatstat::blur). A wrapper is provided:
+
+```{r}
+per2s <- Smooth(per2, kernel = "gaussian", sigma = 0.005)
+```
+
+## Multitapered periodogram
+
+At the moment only sine-family of tapers is implemented. Choose number $P$ for $P^d$ tapers:
+
+```{r}
+per4 <- periodogram_mt(x, P = 2, omega = per1$omega)
+per4
+```
+
+
+# Plotting 2D
+
+Default plotting: The 2D periodograms are converted to spatstat::im objects and the plot.im is called.
+
+```{r, fig.width=6, fig.height=6}
+plot(spatstat::listof(basic=per0, biased=per1, debiased = per2, 
+                      smoothed=per2s, multitapered=per4), main = "")
+```
+
+Does not provide axes-ticks. Alternatively, one can e.g. use ggplot like so:
+
+```{r, fig.width=8, fig.height=3}
+d1 <- rbind(
+  as.data.frame(per2),
+  as.data.frame(per4)
+  )
+  
+
+ggplot(d1, aes(w1, w2, fill = sdf_estimate)) + geom_raster()  + coord_fixed(expand = FALSE) +
+  facet_wrap(~type)
+```
+
+# Estimation of periodogram in wavenumber amplitude only (isotropic/rotationally averaged)
+
+## Rotational averaging
+
+We can simply average the 2D periodogram rotationally. 
+
+```{r}
+per2i <- rotmean.pppgram(per2, adjust = 2) # divides by lambda by default
+# pretty much same as spatstat's
+per2j <- rotmean(as.im(per2) / intensity(x)) # divide this also by lambda
+
+plot(per2i)
+lines(per2j, col = 3)
+```
+
+## Directly using isotropy assumption
+
+Default is to use a squared-exponential taper (set `taper_a=0` for no taper). The current implementation is a bit slow so might prefer the 2D+rotmean approach.
+
+```{r}
+peri <- periodogram_iso(x,  taper_a = 25)
+peri0 <- periodogram_iso(x,  taper_a = 0)
+peri
+```
+
+The results are spatstat::fv - class, so plotting e.g.
+
+```{r}
+plot(peri)
+lines(peri0, col = 3)
+lines(per2i, col = 4, lty = 2)
+```
+
