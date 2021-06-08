@@ -23,7 +23,7 @@ Bartlett's Periodogram for 2D Point Patterns
 }
 \details{
 We estimate the spectral density defined by Bartlett 1964 for a stationary process with 
-intensity $\lambda$ and a pair correlation $g$ as
+intensity lambda and a pair correlation g as
 
 \deqn{\mathcal{F}(\omega) = \lambda + \lambda^2\int_{R^d}[g(z)-1]e^{-2\pi i\omega^T z}dz}
 

@@ -10,7 +10,7 @@
 #' @details
 #'
 #' We estimate the spectral density defined by Bartlett 1964 for a stationary process with 
-#' intensity $\lambda$ and a pair correlation $g$ as
+#' intensity lambda and a pair correlation g as
 #'
 #' \deqn{\mathcal{F}(\omega) = \lambda + \lambda^2\int_{R^d}[g(z)-1]e^{-2\pi i\omega^T z}dz}
 #'
@@ -36,7 +36,7 @@
 #' @seealso \code{\link[=periodogram_mt]{periodogram_mt}} for multi-tapered peridograms; 
 #' \code{\link{smoothen.periodogram}} for operations on the estimated periodograms.
 #'
-#' @import Rcpp spatstat
+#' @import Rcpp spatstat.geom
 #' @export
 
 periodogram <- function(x, 
@@ -48,7 +48,7 @@ periodogram <- function(x,
   x <- check_pp(x)
   # Check wavenumbers
   sl <- sidelengths(Window(x))
-  Vol <- area(x)
+  Vol <- spatstat.geom::area(x)
   if(is.null(omega)) {
     slm <- min( sl )
     omega <- -M:M / slm

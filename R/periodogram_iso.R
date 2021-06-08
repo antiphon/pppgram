@@ -11,7 +11,7 @@
 #' the taper variance, so a smaller number means less tapering. And taper_a = 0 equates to no tapering.
 #' 
 #' 
-#' @importFrom spatstat im
+#' @importFrom spatstat.geom im
 #' @useDynLib pppgram
 #' @import Rcpp
 #' @export
@@ -21,7 +21,7 @@ periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE, taper_a = 
   x <- check_pp(x)
   # Check wavenumbers
   sl <- sidelengths(Window(x))
-  Vol <- area(x)
+  Vol <- spatstat.geom::area(x)
   lambda <- intensity(x)
   #
   if(missing(t)) {

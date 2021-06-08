@@ -2,7 +2,7 @@
 #' 
 #' @param x pppgram-object
 #' @param ... passed on to plot.im of spatstat
-#' 
+#' @importFrom spatstat.geom as.im
 #' @export
 
 plot.pppgram <- function(x, ...) {
@@ -14,7 +14,7 @@ plot.pppgram <- function(x, ...) {
 #' @param x pppgram-object
 #' @param ... ignored
 #' 
-#' @importFrom spatstat plot.im as.im
+#' @importFrom spatstat.geom as.im im
 #' @export
 as.im.pppgram <- function(x, ...) {
   stops <- x$stops
@@ -27,6 +27,7 @@ as.im.pppgram <- function(x, ...) {
 #' @param x pppgram-object
 #' @param ... passed on to spatstat::blur
 #' @details this is convenience function for doing blur(as.im(x), ...) so that the result is restored as pppgram-object.
+#' @importFrom spatstat.core Smooth
 #' @export
 Smooth.pppgram <- function(x, ...)  {
   y <- as.im(x)

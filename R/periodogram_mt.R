@@ -14,7 +14,7 @@
 
 #' @seealso \code{\link[=periodogram]{periodogram}} for the original Bartlett's non-tapered peridogram; 
 #'
-#' @import Rcpp spatstat
+#' @import Rcpp spatstat.geom
 #' @export
 
 periodogram_mt <- function(x, 
@@ -27,7 +27,7 @@ periodogram_mt <- function(x,
   x <- check_pp(x)
   # Check wavenumbers
   sl <- sidelengths(Window(x))
-  Vol <- area(x)
+  Vol <- spatstat.geom::area(x)
   if(is.null(omega)) {
     slm <- min( sl )
     omega <- -M:M / slm
