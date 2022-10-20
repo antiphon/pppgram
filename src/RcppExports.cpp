@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // c_iso_sum
 NumericVector c_iso_sum(NumericMatrix x, NumericVector t, NumericVector sl, double taper_a);
 RcppExport SEXP _pppgram_c_iso_sum(SEXP xSEXP, SEXP tSEXP, SEXP slSEXP, SEXP taper_aSEXP) {

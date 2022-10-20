@@ -60,6 +60,7 @@ as.data.frame.pppgram <- function(x, ...)
   data.frame(x$omega, sdf_estimate = x$sdf_estimate, type = x$type, ...)
 
 
+
 #' Print for pppgram
 #' 
 #' @param x pppgram-object

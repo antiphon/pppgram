@@ -32,7 +32,7 @@ NumericVector c_iso_sum(NumericMatrix x, NumericVector t, NumericVector sl, doub
     for(j = i + 1; j < n ; j++) {
       dx = x(i,0)-x(j,0);
       dy = x(i,1)-x(j,1);
-      d = sqrt( dx*dx + dy*dy) * 2 * PI;
+      d = sqrt( dx*dx + dy*dy) * 2 * M_PI;
       hij = taper(dx/sl(0), dy/sl(1), taper_a );
       for(k = 0; k < nt; k++)
           out(k) += R::bessel_j(d * t(k), 0.0)* hij;
