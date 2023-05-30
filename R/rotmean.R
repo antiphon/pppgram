@@ -10,7 +10,7 @@
 #' @details
 #' Box-car kernel with radius h = adjust * mean(dx, dy) where dx, dy are the step sizes of the grid used to compute the periodogram.
 #'
-#' @import spatstat.core
+#' @import spatstat.explore
 #' @export
 
 rotmean.pppgram <- function(x, t, t_steps = 50, adjust = 1, h, ..., normalise=TRUE) {

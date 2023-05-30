@@ -27,7 +27,7 @@ as.im.pppgram <- function(x, ...) {
 #' @param x pppgram-object
 #' @param ... passed on to spatstat::blur
 #' @details this is convenience function for doing blur(as.im(x), ...) so that the result is restored as pppgram-object.
-#' @importFrom spatstat.core Smooth
+#' @importFrom spatstat.explore Smooth
 #' @export
 Smooth.pppgram <- function(x, ...)  {
   y <- as.im(x)

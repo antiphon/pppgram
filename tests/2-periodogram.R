@@ -2,7 +2,7 @@
 
 devtools::load_all()
 
-x <- bei
+x <- data("bei", package = "spatstat.data")  |> get()
 
 p <- periodogram(x)
 plot(p)
@@ -10,7 +10,7 @@ plot(p)
 
 
 # Check second.
-p2 <- periodogram(x, omega = seq(-1,1, l= 101)/100)
+p2 <- periodogram(x, omega = seq(-1,1, l= 101)/100, debias_early = TRUE)
 plot(p2)
 
 
