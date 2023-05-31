@@ -31,8 +31,8 @@ ringpass <- function(x, # point coordinates
   co    <- centroid.owin(  boundingbox.ppp(x) )
   bb    <- with(x$window, cbind(xrange, yrange))
   bb_sl <- apply(bb, 2, diff)
-  ux    <- seq(bb[1,1], bb[2,1], l = nx+1)
   ny    <- round( bb_sl[2]/bb_sl[1] * nx )
+  ux    <- seq(bb[1,1], bb[2,1], l = nx+1)
   uy    <- seq(bb[1,2], bb[2,2], l = ny+1)
   # pairwise differences, only distance matters
   # if(minus > 0) {
@@ -56,10 +56,13 @@ ringpass <- function(x, # point coordinates
     # add buffers to top+right
     dx  <- diff(ux[1:2])
     dy  <- diff(uy[1:2])
-    uxb <- seq(bb[1,1], bb[2,1]*2, by = dx) - co$x
-    uyb <- seq(bb[1,2], bb[2,2]*2, by = dy) - co$y
     nxb <- nx*2
     nyb <- ny*2
+    bx  <- bb_sl[1]
+    by  <- bb_sl[2]
+    uxb <- seq(bb[1,1], bb[2,1] + bx, by = dx) - co$x
+    #uxb2 <- seq(bb[1,1], bb[2,1] + bx, by = dx) - co$x
+    uyb <- seq(bb[1,2], bb[2,2] + by, by = dy) - co$y
     ugrid <- expand.grid(uyb, 
                          uxb)[,2:1] |> as.matrix()
     ud    <- rowSums(ugrid^2) |> sqrt()
@@ -75,16 +78,17 @@ ringpass <- function(x, # point coordinates
     Mxy[is.na(Mxy)] <- 0 # for masked pixels etc
     Hx    <- fft(Mxy)
     # sum
+    #browser()
     HH    <- Ha * Hx
     # then the convolution is
     Wub    <- Re( fft(HH, TRUE)/nrow(ugrid) )
     # browser()
-    # Wu <- Wub
-    # nx <- nxb
-    # ny <- nyb
-    # ux <- uxb
-    # uy <- uyb
-    Wu     <- Wub[1:(ny+1) + ny/2, 1:(nx+1) + nx/2]
+    #Wu <- Wub
+    #nx <- nxb
+    #ny <- nyb
+    #ux <- uxb
+    #uy <- uyb
+    Wu     <- Wub[1:(ny+1), 1:(nx+1)]
   }
   # 
   Wum   <- matrix(Wu, ncol = nx+1)
