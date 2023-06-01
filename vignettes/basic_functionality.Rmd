@@ -1,8 +1,8 @@
 ---
-title: "pppgram-package: basic functionality"
+title: "Basic functionality"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{basic_functionality}
+  %\VignetteIndexEntry{Basic functionality}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(fig.width = 7, fig.height=5,
 )
 ```
 
-```{r setup}
+```{r setup, message=FALSE}
 library(ggplot2)
 library(pppgram)
 library(spatstat)
@@ -38,7 +38,7 @@ plot(x)
 
 
 ```{r}
-per0 <- periodogram(x, M = 15)
+per0 <- periodogram(x, M = 25)
 per0
 ```
 
@@ -46,11 +46,11 @@ If non-Fourier grid wavenumbers are used (or a non-rectangular window is used) t
 
 ```{r, fig.width=6, fig.height=6}
 per1 <- periodogram(x, omega = seq(-1, 1, l = 51)*.15, debias_early = FALSE) # will have bias near w=0
-per2 <- periodogram(x, omega = per1$omega) # the default is TRUE
+per2 <- periodogram(x, omega = per1$omega) # the debias_early default is TRUE
 ```
 
 ## Smoothing
-This is simple smoother application using spatstat::Smooth.im (using spatstat::blur). A wrapper is provided:
+This is simple smoother application using `spatstat.explore::Smooth.im`. A wrapper is provided:
 
 ```{r}
 per2s <- Smooth(per2, kernel = "gaussian", sigma = 0.005)
@@ -70,12 +70,12 @@ per4
 
 Default plotting: The 2D periodograms are converted to spatstat::im objects and the plot.im is called.
 
-```{r, fig.width=6, fig.height=6}
-plot(spatstat::listof(basic=per0, biased=per1, debiased = per2, 
+```{r, fig.width=6, fig.height=4}
+plot(spatstat.geom::listof(basic=per0, biased=per1, debiased = per2, 
                       smoothed=per2s, multitapered=per4), main = "")
 ```
 
-Does not provide axes-ticks. Alternatively, one can e.g. use ggplot like so:
+Does not provide axes-ticks. Alternatively, one can use `as.data.frame` method and plot with e.g. `ggplot`:
 
 ```{r, fig.width=8, fig.height=3}
 d1 <- rbind(
@@ -83,8 +83,11 @@ d1 <- rbind(
   as.data.frame(per4)
   )
   
-
-ggplot(d1, aes(w1, w2, fill = sdf_estimate)) + geom_raster()  + coord_fixed(expand = FALSE) +
+ggplot(d1, aes(w1, w2, 
+               fill = sdf_estimate )) + 
+  geom_raster()  + 
+  coord_fixed(expand = FALSE) +
+  scale_fill_viridis_c(option = "A") +
   facet_wrap(~type)
 ```
 
@@ -92,12 +95,12 @@ ggplot(d1, aes(w1, w2, fill = sdf_estimate)) + geom_raster()  + coord_fixed(expa
 
 ## Rotational averaging
 
-We can simply average the 2D periodogram rotationally. 
+A reasonable approach is to average the 2D periodogram rotationally. 
 
 ```{r}
-per2i <- rotmean.pppgram(per2, adjust = 2) # divides by lambda by default
-# pretty much same as spatstat's
-per2j <- rotmean(as.im(per2) / intensity(x)) # divide this also by lambda
+per2i <- rotmean.pppgram(per2, adjust = 1) # divides by lambda by default
+# pretty much same as spatstat's, bw arbitrary here
+per2j <- rotmean(as.im(per2) / intensity(x), adjust = 5) # divide this also by lambda
 
 plot(per2i)
 lines(per2j, col = 3)
@@ -113,11 +116,33 @@ peri0 <- periodogram_iso(x,  taper_a = 0)
 peri
 ```
 
-The results are spatstat::fv - class, so plotting e.g.
+The results are in `spatstat::fv` - class, so plotting e.g.
 
 ```{r}
 plot(peri)
 lines(peri0, col = 3)
 lines(per2i, col = 4, lty = 2)
 ```
+
+# Ring-pass filtering
+
+The sdf at low wavenumbers captures the clustering at higher spatial scales. 
+
+We can visualise the data pattern's "signal" at those wavenumbers using a filter.
+
+```{r, fig.width=4, fig.height=3}
+lo <- ringpass(x, a = 0, b = 0.05, nx = 2^9)
+# for comparison, higher wavenumber filter
+hi <- ringpass(x, a = 0.15, b= 0.2, nx = 2^9)
+
+co <- hcl.colors(12, "Mint")  
+
+par(mfrow= c(2,1), mar = c(0,0,1,0))
+plot(lo, col = co, ribbon = FALSE)
+points(x, cex = .05)
+plot(hi, col = co, ribbon = FALSE)
+```
+
+
+
 
