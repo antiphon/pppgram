@@ -68,8 +68,11 @@ periodogram <- function(x,
   # Here we only do the 'raw' or 'untapered' periodogram.
   weight <- 1/sqrt(Vol) # raw
   #
-  # First, compute DFT. 
+  # First, compute DFT. TODO: Not optimized
   DFT <- rowSums(weight * exp( -1i * 2 * pi * o %*% tloc))
+  #to <- t(o)
+  #DFT <- weight * apply( tloc, 2, \(u) colSums( exp(-1i * 2 * pi * u * to) )  )
+  browser()
   #
   # Debias before modulus?
   if(debias_early) {

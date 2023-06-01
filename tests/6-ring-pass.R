@@ -2,7 +2,7 @@
 
 devtools::load_all()
 
-x <- spatstat.random::rpoispp(lambda = 300/200^2, win = as.owin(c(-1,1,-1,1)*100))
+x <- spatstat.random::rpoispp(lambda = 300/200^2, win = as.owin(c(-1,1,-1,1)*100 - 1000))
 #x <- data("bei", package = "spatstat.data")  |> get()
 
 

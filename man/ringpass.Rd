@@ -15,7 +15,7 @@ ringpass(x, a = 0.1, b = 0.2, nx = 2^4, minus = FALSE, fft = TRUE)
 
 \item{nx}{resolution, in x-dimension}
 
-\item{minus}{ignored for now}
+\item{minus}{development, will drop points at edge if fft = FALSE}
 
 \item{fft}{use FFT-based approximation? default: TRUE}
 }
