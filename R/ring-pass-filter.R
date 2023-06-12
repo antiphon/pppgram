@@ -92,6 +92,8 @@ ringpass <- function(x, # point coordinates
     Wu     <- Wub[1:(ny+1), 1:(nx+1)]
   }
   # 
+  # if 0, center
+  Wu <- Wu - intensity(x)
   Wum   <- matrix(Wu, ncol = nx+1)
   
   #  browser()
