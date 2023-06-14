@@ -72,7 +72,6 @@ periodogram <- function(x,
   DFT <- rowSums(weight * exp( -1i * 2 * pi * o %*% tloc))
   #to <- t(o)
   #DFT <- weight * apply( tloc, 2, \(u) colSums( exp(-1i * 2 * pi * u * to) )  )
-  browser()
   #
   # Debias before modulus?
   if(debias_early) {

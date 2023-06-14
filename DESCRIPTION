@@ -1,7 +1,7 @@
 Package: pppgram
 Type: Package
 Title: Periodograms for Spatial Point Patterns
-Version: 0.5
+Version: 0.6
 Author: Tuomas Rajala
 Maintainer: Tuomas Rajala <tuomas.rajala@iki.fi>
 Description: Computation of (de-biased) periodograms, multitapered periodograms and isotropic periodograms for spatial point patterns. This early version supports data in spatstat::ppp-objects with rectangular data windows.
