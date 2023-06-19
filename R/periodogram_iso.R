@@ -6,6 +6,7 @@
 #' @param debias Apply debiasing after estimation? Will reduce bias near 0, but might lead to a negative estimates.
 #' @param normalise Divide by lambda? Poisson process will then be in theory constant 1.
 #' @param taper_a Use a squared-exponential taper with range taper_a>0? Default: 25.
+#' @param int_n numerical integration tuning
 #' 
 #' @details Basically, the Hankel-transform of the data. Note that the taper-parameter (taper_a) is related to the inverse of 
 #' the taper variance, so a smaller number means less tapering. And taper_a = 0 equates to no tapering.
@@ -16,8 +17,9 @@
 #' @import Rcpp
 #' @export
 
-periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE, taper_a = 25
-                            ) {
+periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE, 
+                            taper_a = 25, 
+                            int_n = n(150, 200)) {
   x <- check_pp(x)
   # Check wavenumbers
   sl <- sidelengths(Window(x))
@@ -35,7 +37,7 @@ periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE, taper_a = 
   sdf <- lambda + 2 * value/Vol
   
   if(debias) {
-    bias <- ppgram_iso_bias(sl, t, taper_a)
+    bias <- pppgram_iso_bias(sl, t, taper_a, n = int_n)
     lambda2 <- lambda^2 - lambda/Vol
     #browser()
     sdf <- sdf - lambda2 * bias
@@ -73,7 +75,7 @@ periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE, taper_a = 
 #' @param n grid lengths for numerical integration, order (ang, r)
 #' 
 #' @export
-ppgram_iso_bias <- function(sl, t, taper_a, n = c(150, 200)) {
+pppgram_iso_bias <- function(sl, t, taper_a, n = c(150, 200)) {
   V <- prod(sl)
   # Sq-exp taper.
   h2d <- function(x) exp( -taper_a/4 * ((x[1,]/sl[1])^2 + (x[2,]/sl[2])^2 )  ) / V
@@ -100,6 +102,8 @@ ppgram_iso_bias <- function(sl, t, taper_a, n = c(150, 200)) {
   )
   Han  * ( 2 * pi )
 }
+
+
 
 #' 
 #' #' Isotropised Set Covariance of a Rectangle
