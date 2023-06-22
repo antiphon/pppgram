@@ -19,7 +19,7 @@
 
 periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE, 
                             taper_a = 25, 
-                            int_n = n(150, 200)) {
+                            int_n = c(150, 200)) {
   x <- check_pp(x)
   # Check wavenumbers
   sl <- sidelengths(Window(x))
@@ -56,10 +56,10 @@ periodogram_iso <- function(x, t, ..., debias = TRUE, normalise=TRUE,
              fname = "I")
   attr(out, "is_periodogram") <- TRUE
   attr(out, "normalised") <- normalise
-  attr(out, "W") <- Window(x)
-  attr(out, "lambda") <- lambda
-  attr(out, "taper_a") <- taper_a
-  attr(out, "type") <- type
+  attr(out, "W")          <- Window(x)
+  attr(out, "lambda")     <- lambda
+  attr(out, "taper_a")    <- taper_a
+  attr(out, "type")       <- type
   out
 }
 

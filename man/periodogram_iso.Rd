@@ -4,7 +4,15 @@
 \alias{periodogram_iso}
 \title{Isotropic Periodogram Estimator}
 \usage{
-periodogram_iso(x, t, ..., debias = TRUE, normalise = TRUE, taper_a = 25)
+periodogram_iso(
+  x,
+  t,
+  ...,
+  debias = TRUE,
+  normalise = TRUE,
+  taper_a = 25,
+  int_n = c(150, 200)
+)
 }
 \arguments{
 \item{x}{point pattern ppp-object with a rectangular window}
@@ -18,6 +26,8 @@ periodogram_iso(x, t, ..., debias = TRUE, normalise = TRUE, taper_a = 25)
 \item{normalise}{Divide by lambda? Poisson process will then be in theory constant 1.}
 
 \item{taper_a}{Use a squared-exponential taper with range taper_a>0? Default: 25.}
+
+\item{int_n}{numerical integration tuning}
 }
 \description{
 Isotropic Periodogram Estimator
