@@ -86,7 +86,7 @@ pppgram_iso_bias <- function(sl, t, taper_a, n = c(150, 200)) {
   #
   angs <- seq(0, pi, length = n[1])[-1] # symmetric, half is enough
   da <- angs[2] - angs[1]
-  rmax <- sqrt(sum(sl^2)) # afterwhich setcov = 0
+  rmax <- sqrt(sum(sl^2)) # afterwhich setcov = 0 
   rgrid <- seq(0, rmax, length = n[2])[-1]
   dr <- rgrid[2] - rgrid[1]
   #
@@ -97,10 +97,11 @@ pppgram_iso_bias <- function(sl, t, taper_a, n = c(150, 200)) {
     2 * sum( h(u) * set_cov) * da / (2*pi)
   }
   funhr <- sapply(rgrid, funh) # need to compute only once
-  Han <- sapply(t, function(ti) 
-    sum( besselJ(2*pi*ti*rgrid, 0) * rgrid * funhr ) * dr
+  Han <- vapply(t, function(ti) 
+    sum( besselJ(2*pi*ti*rgrid, 0) * rgrid * funhr ) * dr,
+    0.0
   )
-  Han  * ( 2 * pi )
+  (Han)  * ( 2 * pi )
 }
 
 

@@ -1,6 +1,6 @@
 # pppgram
 
-Periodograms for Spatial Point Patterns. This package is for stable implementations and for CRAN. 
+Spectral statistics, particularly periodograms as in estimators of spectral density function, for Spatial Point Pattern data. This package is for stable implementations. 
 
 The package implements the main ideas of the papers
 

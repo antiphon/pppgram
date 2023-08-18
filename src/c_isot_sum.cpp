@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 
 double taper_sqExp(double x1, double x2, double a){
-  return exp( -a * pow(x1/2.0,2) ) * exp( -a * pow(x2/2.0,2) );
+  return exp( -a/4.0 * (pow(x1,2) + pow(x2,2)) );
 }
 
 double taper1(double x1, double x2, double a){
@@ -32,10 +32,10 @@ NumericVector c_iso_sum(NumericMatrix x, NumericVector t, NumericVector sl, doub
     for(j = i + 1; j < n ; j++) {
       dx = x(i,0)-x(j,0);
       dy = x(i,1)-x(j,1);
-      d = sqrt( dx*dx + dy*dy) * 2 * M_PI;
+      d = sqrt( dx*dx + dy*dy) * M_2PI;
       hij = taper(dx/sl(0), dy/sl(1), taper_a );
       for(k = 0; k < nt; k++)
-          out(k) += R::bessel_j(d * t(k), 0.0)* hij;
+          out(k) += R::bessel_j(d * t(k), 0.0) * hij;
     }
   }
   return out;
