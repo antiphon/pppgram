@@ -79,7 +79,6 @@ ringpass <- function(x, # point coordinates
     Mxy[is.na(Mxy)] <- 0 # for masked pixels etc
     Hx    <- fft(Mxy)
     # sum
-    #browser()
     HH    <- Ha * Hx
     # then the convolution is
     Wub    <- Re( fft(HH, TRUE)/nrow(ugrid) )
@@ -96,6 +95,5 @@ ringpass <- function(x, # point coordinates
   Wu <- Wu - intensity(x)
   Wum   <- matrix(Wu, ncol = nx+1)
   
-  #  browser()
   im(Wum, xcol = ux, yrow = uy)
 }
